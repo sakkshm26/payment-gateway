@@ -72,6 +72,7 @@ const pay = () => {
                             placeholder="Card Number"
                             type="text"
                             maxLength={16}
+                            minLength={5}
                             value={cardData.card_number}
                             onChange={(e) =>
                                 setCardData({

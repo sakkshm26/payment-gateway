@@ -22,7 +22,14 @@ export const createPayment = async (req, res) => {
 
 export const getPayments = async (req, res) => {
     try {
-        const payments = await Payment.find({ user_id: req.user_id }); 
+        let payments = await Payment.find({ user_id: req.user_id });
+
+        payments = payments.map((payment) => {
+            if (payment.type == "card") {
+                payment.data.card_number = payment.data.card_number.slice(-4);
+            }
+            return payment;
+        });
 
         res.status(200).json(payments);
     } catch (err) {
@@ -31,12 +38,12 @@ export const getPayments = async (req, res) => {
             message: "Something went wrong when getting payments",
         });
     }
-}
+};
 
 export const getPayment = async (req, res) => {
     try {
         const payment = await Payment.findById(req.params.id);
-        
+
         if (!payment) {
             return res.status(404).json({ message: "Payment not found" });
         }
@@ -48,4 +55,4 @@ export const getPayment = async (req, res) => {
             message: "Something went wrong when creating a payment",
         });
     }
-}
+};
