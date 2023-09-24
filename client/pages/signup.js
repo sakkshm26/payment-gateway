@@ -38,6 +38,7 @@ const signup = () => {
                             setData({ ...data, username: e.target.value })
                         }
                         required={true}
+                        maxLength={25}
                     />
                     <input
                         name="password"
@@ -48,6 +49,7 @@ const signup = () => {
                             setData({ ...data, password: e.target.value })
                         }
                         required={true}
+                        maxLength={25}
                     />
                     <button type="submit">Submit</button>
                 </form>

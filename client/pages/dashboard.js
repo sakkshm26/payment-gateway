@@ -22,7 +22,8 @@ const dashboard = () => {
             ) : (
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: 'center', alignItems: "center" }}>
                     Dashboard
-                    <button onClick={() => router.push("/pay")}>Pay</button>
+                    <button onClick={() => router.push("/payment/pay")}>Pay</button>
+                    <button onClick={() => router.push("/payment/history")}>View History</button>
                     <button onClick={logout} style={{ width: 100 }}>Logout</button>
                 </div>
             )}

@@ -20,7 +20,7 @@ function useAuth() {
                 `${process.env.NEXT_PUBLIC_BASE_URL}/user/login`,
                 data
             );
-            Cookies.set("user", response.data);
+            Cookies.set("user", JSON.stringify(response.data));
             setUser(response.data);
             router.push("/dashboard");
         } catch (err) {
@@ -34,7 +34,7 @@ function useAuth() {
                 `${process.env.NEXT_PUBLIC_BASE_URL}/user/signup`,
                 data
             );
-            Cookies.set("user", response.data);
+            Cookies.set("user", JSON.stringify(response.data));
             setUser(response.data);
             router.push("/dashboard");
         } catch (err) {
