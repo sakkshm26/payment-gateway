@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
 const paymentSchema = new mongoose.Schema({
-    user_id: { type: String, required: true },
+    sender_id: { type: String },
+    receiver_id: { type: String, required: true },
     amount: { type: Number, required: true },
     type: { type: String, Enumerator: ["card", "upi"] },
     data: { type: Object },

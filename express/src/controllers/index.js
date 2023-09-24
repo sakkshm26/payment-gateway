@@ -1,4 +1,14 @@
-import { userSignup, userLogin } from "./user.js";
-import { createPayment, getPayments, getPayment } from "./payment.js";
+import { userSignup, userLogin, getUserData } from "./user.js";
+import { createPayment, getReceivedPayments, getSentPayments, getPayment } from "./payment.js";
+import { syncPayments } from "./quickbooks.js";
 
-export { userSignup, userLogin, createPayment, getPayments, getPayment };
+export {
+    userSignup,
+    userLogin,
+    getUserData,
+    createPayment,
+    getReceivedPayments,
+    getSentPayments,
+    getPayment,
+    syncPayments,
+};

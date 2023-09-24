@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import { userRouter, paymentRouter } from "./routers/index.js";
+import { userRouter, paymentRouter, quickbooksRouter } from "./routers/index.js";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import auth from "./middlewares/auth.js";
@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/user", userRouter);
 app.use("/payment", auth, paymentRouter);
+app.use("/quickbooks", quickbooksRouter);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on http://localhost:${process.env.PORT}`);

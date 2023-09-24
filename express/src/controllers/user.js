@@ -63,3 +63,14 @@ export const userLogin = async (req, res) => {
         res.status(500).json({ message: "Something went wrong during login" });
     }
 };
+
+export const getUserData = async (req, res) => {
+    try {
+        console.log(req.user_id)
+      const user = await User.findById(req.user_id);
+      res.status(200).json(user);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "Something went wrong when getting user data" });
+    }
+}

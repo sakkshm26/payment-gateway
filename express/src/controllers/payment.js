@@ -2,13 +2,14 @@ import Payment from "../models/payment.js";
 
 export const createPayment = async (req, res) => {
     try {
-        const { amount, type, data } = req.body;
+        const { amount, type, data, receiver_id } = req.body;
 
         const payment = await Payment.create({
             amount,
             type,
             data,
-            user_id: req.user_id,
+            sender_id: req.user_id,
+            receiver_id
         });
 
         res.status(200).json(payment);
@@ -20,9 +21,29 @@ export const createPayment = async (req, res) => {
     }
 };
 
-export const getPayments = async (req, res) => {
+export const getSentPayments = async (req, res) => {
     try {
-        let payments = await Payment.find({ user_id: req.user_id });
+        let payments = await Payment.find({ sender_id: req.user_id });
+
+        payments = payments.map((payment) => {
+            if (payment.type == "card") {
+                payment.data.card_number = payment.data.card_number.slice(-4);
+            }
+            return payment;
+        });
+
+        res.status(200).json(payments);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: "Something went wrong when getting payments",
+        });
+    }
+};
+
+export const getReceivedPayments = async (req, res) => {
+    try {
+        let payments = await Payment.find({ receiver_id: req.user_id });
 
         payments = payments.map((payment) => {
             if (payment.type == "card") {

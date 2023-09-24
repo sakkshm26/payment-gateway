@@ -22,8 +22,10 @@ const dashboard = () => {
             ) : (
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: 'center', alignItems: "center" }}>
                     Dashboard
-                    <button onClick={() => router.push("/payment/pay")}>Pay</button>
-                    <button onClick={() => router.push("/payment/history")}>View History</button>
+                    <button onClick={() => router.push("/payment/pay?receiver_id=testid123")}>Pay</button>
+                    <button onClick={() => router.push("/payment/sent")}>Payments sent</button>
+                    <button onClick={() => router.push("/payment/received")}>Payments received</button>
+                    <button onClick={() => router.push(`/profile`)}>My Payment Page</button>
                     <button onClick={logout} style={{ width: 100 }}>Logout</button>
                 </div>
             )}

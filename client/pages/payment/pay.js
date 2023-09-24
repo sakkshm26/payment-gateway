@@ -1,8 +1,10 @@
 import { Box } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import API from "../../constant/api";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { AuthContext } from "../../auth/useAuth";
+import { useSearchParams } from "next/navigation";
 
 const pay = () => {
     const [paymentType, setPaymentType] = useState(null);
@@ -16,6 +18,12 @@ const pay = () => {
     const [amount, setAmount] = useState(0);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const { user } = useContext(AuthContext);
+    const receiver_id = useSearchParams().get('receiver_id')
+
+    useEffect(() => {
+        if (!user) router.push("/login");
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,6 +35,7 @@ const pay = () => {
                 amount,
                 data: req_data,
                 type: paymentType,
+                receiver_id: receiver_id,
             });
             router.push(`/payment/success?id=${response.data._id}`);
         } catch (err) {
