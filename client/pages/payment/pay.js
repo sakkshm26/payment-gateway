@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../auth/useAuth";
 import { useSearchParams } from "next/navigation";
+import PrimaryButton from "../../components/primaryButton";
+import CustomInput from "../../components/customInput";
 
 const pay = () => {
     const [paymentType, setPaymentType] = useState(null);
@@ -15,15 +17,15 @@ const pay = () => {
         name: "",
         cvv: "",
     });
-    const [amount, setAmount] = useState(0);
+    const [amount, setAmount] = useState();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const { user } = useContext(AuthContext);
-    const receiver_id = useSearchParams().get('receiver_id')
+    const receiver_id = useSearchParams().get("receiver_id");
 
     useEffect(() => {
         if (!user) router.push("/login");
-    }, [])
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -51,7 +53,10 @@ const pay = () => {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                border: "1px solid white",
+                borderRadius: 4,
+                margin: "100px 35% 0 35%",
+                padding: "45px 0 60px 0",
+                boxShadow: "grey 0px 0px 50px -28px",
             }}
         >
             {paymentType === null ? (
@@ -61,12 +66,29 @@ const pay = () => {
                         flexDirection: "column",
                     }}
                 >
-                    <button onClick={() => setPaymentType("card")}>Card</button>
-                    <button onClick={() => setPaymentType("upi")}>UPI</button>
+                    <p>Demo Payment Gateway</p>
+                    <Box height={40} />
+                    <PrimaryButton
+                        text="Card"
+                        onClick={() => setPaymentType("card")}
+                    />
+                    <Box height={30} />
+                    <PrimaryButton
+                        text="UPI"
+                        onClick={() => setPaymentType("upi")}
+                    />
                 </Box>
             ) : paymentType === "card" ? (
-                <form onSubmit={handleSubmit}>
-                    <input
+                <form
+                    onSubmit={handleSubmit}
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <CustomInput
                         name="amount"
                         type="number"
                         maxLength={10}
@@ -75,8 +97,9 @@ const pay = () => {
                         onChange={(e) => setAmount(e.target.value)}
                         required={true}
                     />
+                    <Box sx={{ height: 20 }}></Box>
                     <Box sx={{ display: "flex" }}>
-                        <input
+                        <CustomInput
                             name="card_number"
                             placeholder="Card Number"
                             type="text"
@@ -91,7 +114,8 @@ const pay = () => {
                             }
                             required={true}
                         />
-                        <input
+                        <Box width={30} />
+                        <CustomInput
                             name="expiry"
                             placeholder="Expiry"
                             type="text"
@@ -106,8 +130,9 @@ const pay = () => {
                             required={true}
                         />
                     </Box>
+                    <Box sx={{ height: 20 }}></Box>
                     <Box sx={{ display: "flex" }}>
-                        <input
+                        <CustomInput
                             name="name"
                             placeholder="Card Holder's Name"
                             type="text"
@@ -121,7 +146,8 @@ const pay = () => {
                             }
                             required={true}
                         />
-                        <input
+                        <Box width={30} />
+                        <CustomInput
                             name="cvv"
                             placeholder="CVV"
                             type="text"
@@ -136,13 +162,24 @@ const pay = () => {
                             required={true}
                         />
                     </Box>
-                    <button type="submit" disabled={loading}>
-                        Pay
-                    </button>
+                    <Box height={40} />
+                    <PrimaryButton
+                        text="Pay"
+                        type="submit"
+                        disabled={loading}
+                    />
                 </form>
             ) : (
-                <form onSubmit={handleSubmit}>
-                    <input
+                <form
+                    onSubmit={handleSubmit}
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <CustomInput
                         name="amount"
                         type="number"
                         maxLength={10}
@@ -151,7 +188,8 @@ const pay = () => {
                         onChange={(e) => setAmount(e.target.value)}
                         required={true}
                     />
-                    <input
+                    <Box sx={{ height: 20 }}></Box>
+                    <CustomInput
                         name="id"
                         placeholder="UPI ID"
                         type="text"
@@ -165,9 +203,12 @@ const pay = () => {
                         }
                         required={true}
                     />
-                    <button type="submit" disabled={loading}>
-                        Pay
-                    </button>
+                    <Box sx={{ height: 40 }}></Box>
+                    <PrimaryButton
+                        text="Pay"
+                        type="submit"
+                        disabled={loading}
+                    />
                 </form>
             )}
             {loading ? <p>Loading...</p> : null}

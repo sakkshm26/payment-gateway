@@ -7,18 +7,23 @@ const Payment = ({payment}) => {
             sx={{
                 display: "flex",
                 flexDirection: "column",
-                border: "1px solid white",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 4,
+                margin: "20px 35% 0 35%",
+                padding: "30px 130px",
+                boxShadow: "grey 0px 0px 50px -28px",
             }}
         >
-            <p>Amount: {payment.amount}</p>
-            <p>Type: {payment.type.toUpperCase()}</p>
+            <p style={{ margin: "8px 0" }}>Amount: {payment.amount}</p>
+            <p style={{ margin: "8px 0" }}>Type: {payment.type.toUpperCase()}</p>
             <Box>
                 {payment.type == "card" ? (
-                    <p>Card number: **** **** **** {payment.data.card_number}</p>
+                    <p style={{ margin: "8px 0" }}>Card number: **** **** **** {payment.data.card_number}</p>
                 ) : payment.type == "upi" ? (
-                    <p>UPI ID: {payment.data.id}</p>
+                    <p style={{ margin: "8px 0" }}>UPI ID: {payment.data.id}</p>
                 ) : (
-                    "quickbooks data"
+                    <p style={{ margin: "8px 0" }}>quickbooks data</p>
                 )}
             </Box>
         </Box>

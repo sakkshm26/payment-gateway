@@ -4,6 +4,8 @@ import Payment from "../../components/payment";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../auth/useAuth";
 import Cookies from "js-cookie";
+import { Box } from "@mui/material";
+import PrimaryButton from "../../components/primaryButton";
 
 const sent = () => {
     const [loading, setLoading] = useState(true);
@@ -24,7 +26,11 @@ const sent = () => {
 
     const handleSync = async () => {
         window.open(
-            `https://appcenter.intuit.com/connect/oauth2?scope=openid%20com.intuit.quickbooks.accounting&client_id=${process.env.NEXT_PUBLIC_QUICKBOOKS_CLIENT_ID}&response_type=code&access_type=offline&state=${JSON.parse(Cookies.get("user")).user_id}&redirect_uri=${process.env.NEXT_PUBLIC_QUICKBOOKS_CALLBACK_URL}`
+            `https://appcenter.intuit.com/connect/oauth2?scope=openid%20com.intuit.quickbooks.accounting&client_id=${
+                process.env.NEXT_PUBLIC_QUICKBOOKS_CLIENT_ID
+            }&response_type=code&access_type=offline&state=${
+                JSON.parse(Cookies.get("user")).user_id
+            }&redirect_uri=${process.env.NEXT_PUBLIC_QUICKBOOKS_CALLBACK_URL}`
         );
     };
 
@@ -34,15 +40,31 @@ const sent = () => {
     }, []);
 
     return (
-        <div>
-            <button onClick={handleSync}>Sync Payments With Quickbooks</button>
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+            }}
+        >
+            <Box height={20} />
+            <PrimaryButton
+                text="Sync Payments With Quickbooks"
+                onClick={handleSync}
+                width="100px"
+            />
+            <Box height={20} />
             {loading ? (
                 <p>Loading...</p>
-            ) : (
-                payments.length ? payments.map((payment, index) => (
+            ) : payments.length ? (
+                payments.map((payment, index) => (
                     <Payment key={index} payment={payment} />
-                )) : <p>No payments received</p>
+                ))
+            ) : (
+                <p>No payments received</p>
             )}
+            <Box height={20} />
         </div>
     );
 };

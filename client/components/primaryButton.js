@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import React from "react";
 
-const PrimaryButton = ({ text, onClick }) => {
+const PrimaryButton = ({ text, onClick, ...props }) => {
     return (
         <Button
             sx={{
@@ -13,6 +13,7 @@ const PrimaryButton = ({ text, onClick }) => {
                 fontWeight: "600"
             }}
             onClick={onClick}
+            {...props}
         >
             {text}
         </Button>

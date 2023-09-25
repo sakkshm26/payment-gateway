@@ -5,6 +5,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../auth/useAuth";
 import { useEffect } from "react";
+import CustomInput from "../components/customInput";
+import { Box } from "@mui/material";
+import PrimaryButton from "../components/primaryButton";
 
 const signup = () => {
     const [data, setData] = useState({ username: "", password: "" });
@@ -28,10 +31,16 @@ const signup = () => {
             {loading ? (
                 <p>Loading...</p>
             ) : (
-                <form onSubmit={handleSubmit}>
-                    <input
+                <form onSubmit={handleSubmit} style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}>
+                    <Box height={80} />
+                    <CustomInput
                         name="username"
-                        placeholder="username"
+                        placeholder="Username"
                         type="text"
                         value={data.username}
                         onChange={(e) =>
@@ -40,9 +49,10 @@ const signup = () => {
                         required={true}
                         maxLength={25}
                     />
-                    <input
+                    <Box height={20} />
+                    <CustomInput
                         name="password"
-                        placeholder="password"
+                        placeholder="Password"
                         type="password"
                         value={data.password}
                         onChange={(e) =>
@@ -51,7 +61,10 @@ const signup = () => {
                         required={true}
                         maxLength={25}
                     />
-                    <button type="submit">Submit</button>
+                    <Box height={50} />
+                    <PrimaryButton text="Signup" type="submit" />
+                    <Box height={10} />
+                    <a href="/login" style={{ fontSize: 13, color: "grey" }}>Or Login</a>
                 </form>
             )}
             <ToastContainer theme="light" />

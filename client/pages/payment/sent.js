@@ -3,6 +3,7 @@ import API from "../../constant/api";
 import Payment from "../../components/payment";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../auth/useAuth";
+import { Box } from "@mui/material";
 
 const sent = () => {
     const [loading, setLoading] = useState(true);
@@ -35,6 +36,7 @@ const sent = () => {
                     <Payment key={index} payment={payment} />
                 )) : <p>No payments made</p>
             )}
+            <Box height={20} />
         </div>
     );
 };
