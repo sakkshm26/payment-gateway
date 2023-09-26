@@ -5,10 +5,10 @@ const PrimaryButton = ({ text, onClick, ...props }) => {
     return (
         <Button
             sx={{
-                backgroundColor: "#17102b",
+                backgroundColor: "#1f1440",
                 color: "#d2d2d2",
                 padding: "7px 40px",
-                "&:hover": { backgroundColor: "#241d38" },
+                "&:hover": { backgroundColor: "#30215c" },
                 fontSize: 13,
                 fontWeight: "600"
             }}
