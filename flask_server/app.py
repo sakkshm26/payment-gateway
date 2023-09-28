@@ -25,6 +25,10 @@ embeddings = OpenAIEmbeddings()
 
 app = Flask(__name__)
 
+@app.get('/health')
+def health():
+    return {"status": "ok"}
+
 @app.post('/getMessage')
 def predict():
     text = request.get_json()['text']
