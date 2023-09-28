@@ -25,10 +25,6 @@ embeddings = OpenAIEmbeddings()
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return 'Hello World!'
-
 @app.post('/getMessage')
 def predict():
     text = request.get_json()['text']

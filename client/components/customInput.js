@@ -10,6 +10,7 @@ const CustomInput = ({
     value,
     onChange,
     required,
+    style
 }) => {
     return (
         <Input
@@ -22,6 +23,7 @@ const CustomInput = ({
             onChange={onChange}
             required={required}
             sx={{ color: "white", borderBottom: "1px solid #2b2b2b" }}
+            style={style}
         />
     );
 };

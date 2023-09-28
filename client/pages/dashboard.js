@@ -7,12 +7,25 @@ import { useState } from "react";
 import API from "../constant/api";
 import { Box, Button } from "@mui/material";
 import PrimaryButton from "../components/primaryButton";
-import { ArrowForwardIos, Clear } from "@mui/icons-material";
+import { Send, Clear, Chat } from "@mui/icons-material";
+import CustomInput from "../components/customInput";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [username, setUsername] = useState();
-    const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState("");
+    const [messages, setMessages] = useState([
+        { text: "Hi! How can I help you?", sender: "bot" },
+        { text: "Hi! How can I help you?", sender: "user" },
+        { text: "Hi! How can I help you?", sender: "bot" },
+        { text: "Hi! How can I help you?", sender: "user" },
+        { text: "Hi! How can I help you?", sender: "bot" },
+        { text: "Hi! How can I help you?", sender: "user" },
+        { text: "Hi! How can I help you?", sender: "bot" },
+        { text: "Hi! How can I help you?", sender: "user" },
+    ]);
     const { user, logout } = useContext(AuthContext);
     const router = useRouter();
 
@@ -30,6 +43,20 @@ const dashboard = () => {
         } catch (err) {
             console.log(err);
             toast.error(err?.response?.data?.message || "Something went wrong");
+        }
+    };
+
+    const sendMessage = async (e) => {
+        e.preventDefault();
+        try {
+            if (message.length) {
+                const response = await axios.post("https://razorpay-chatbot-service.onrender.com/getMessage", { text: message });
+                console.log("res ---->", response.data)
+            }
+            setMessage("");
+        } catch (err) {
+            console.log(err);
+            toast.error("Something went wrong");
         }
     };
 
@@ -90,7 +117,7 @@ const dashboard = () => {
                     {/* Button placed at the bottom right */}
                     <Box style={{ position: "fixed", bottom: 20, right: 20 }}>
                         <PrimaryButton
-                            text="Your Button"
+                            text={<Chat />}
                             onClick={toggleChatbot}
                         />
                     </Box>
@@ -101,14 +128,13 @@ const dashboard = () => {
                                 bottom: 20,
                                 right: 20,
                                 background: "#0b0b0b",
-                                // boxShadow: "grey 0px 0px 50px -28px",
                                 borderRadius: 4,
-                                padding: "15px",
+                                padding: "15px 5px",
                                 display: "flex",
                                 flexDirection: "column",
                                 justifyContent: "space-between",
                                 alignItems: "center",
-                                height: 350, // Fixed height for the chatbot container
+                                height: 350,
                                 width: 280,
                             }}
                         >
@@ -116,7 +142,8 @@ const dashboard = () => {
                                 sx={{
                                     width: "100%",
                                     overflowY: "auto",
-                                    padding: "15px",
+                                    padding: "10px",
+                                    height: "100%",
                                 }}
                             >
                                 {messages.map((message) =>
@@ -170,29 +197,36 @@ const dashboard = () => {
                                 )}
                             </Box>
                             <Box height={30} />
-                            <Box
-                                sx={{
-                                    width: "85%",
-                                    height: 4,
-                                    backgroundColor: "#2b2b2b",
-                                }}
-                            />
-                            <Box height={30} />
-                            <Box
-                                sx={{
-                                    width: "100%",
-                                    display: "flex",
-                                    justifyContent: "space-around",
-                                    alignItems: "flex-end",
-                                }}
-                            >
-                                <Button sx={{ color: "white" }}>
-                                    <Clear />
-                                </Button>
-                                <Button sx={{ color: "white" }}>
-                                    <ArrowForwardIos />
-                                </Button>
-                            </Box>
+                            <form onSubmit={sendMessage}>
+                                <CustomInput
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                    placeholder="Enter your message"
+                                    style={{ width: "100%" }}
+                                />
+                                <Box height={10} />
+                                <Box
+                                    sx={{
+                                        width: "100%",
+                                        display: "flex",
+                                        justifyContent: "space-around",
+                                        alignItems: "flex-end",
+                                    }}
+                                >
+                                    <Button
+                                        sx={{ color: "white" }}
+                                        onClick={toggleChatbot}
+                                    >
+                                        <Clear />
+                                    </Button>
+                                    <Button
+                                        sx={{ color: "white" }}
+                                        type="submit"
+                                    >
+                                        <Send />
+                                    </Button>
+                                </Box>
+                            </form>
                         </Box>
                     )}
                 </Box>
