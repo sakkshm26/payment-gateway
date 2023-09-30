@@ -9,7 +9,7 @@ export const createPayment = async (req, res) => {
             type,
             data,
             sender_id: req.user_id,
-            receiver_id
+            receiver_id,
         });
 
         res.status(200).json(payment);

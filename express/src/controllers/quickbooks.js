@@ -39,16 +39,16 @@ export const syncPayments = async (req, res) => {
             }
         );
 
-        const payments = payments_response.data.QueryResponse.Payment
+        const payments = payments_response.data.QueryResponse.Payment;
 
-        payments.map(async payment => {
+        payments.map(async (payment) => {
             await Payment.create({
                 amount: payment.TotalAmt,
                 type: "quickbooks",
                 data: payment,
-                receiver_id: state
-            })
-        })
+                receiver_id: state,
+            });
+        });
 
         res.redirect(`${process.env.CLIENT_URL}/payment/history`);
     } catch (err) {
