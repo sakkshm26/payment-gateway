@@ -1,13 +1,10 @@
-from flask import Flask, request
+from bottle import route, run, request, post
 import openai
 import os
 from dotenv import load_dotenv
 import pickle
-import faiss
-from langchain.vectorstores import FAISS
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.chains import RetrievalQAWithSourcesChain
-from langchain.chains.question_answering import load_qa_chain
 from langchain.chat_models import ChatOpenAI
 
 load_dotenv()
@@ -23,17 +20,15 @@ chain = RetrievalQAWithSourcesChain.from_llm(llm=llm, retriever=VectorStore.as_r
 
 embeddings = OpenAIEmbeddings()
 
-app = Flask(__name__)
+@route('/health')
+def index():
+    return {"success": True}
 
-@app.get('/health')
-def health():
-    return {"status": "ok"}
-
-@app.post('/getMessage')
+@post('/getMessage')
 def predict():
-    text = request.get_json()['text']
-    response = chain({"question": text}, return_only_outputs=True)
-    return {"text": response["answer"]}
+    body = request.POST.get("text", "")
+    print(body)
+    # response = chain({"question": text}, return_only_outputs=True)
+    return {"text": "asd"}
 
-if __name__ == '__main__':
-    app.run()
+run(host='localhost', port=8080)
