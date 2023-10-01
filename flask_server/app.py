@@ -26,9 +26,8 @@ def index():
 
 @post('/getMessage')
 def predict():
-    body = request.POST.get("text", "")
-    print(body)
-    # response = chain({"question": text}, return_only_outputs=True)
-    return {"text": "asd"}
+    text = request.json.get("text")
+    response = chain({"question": text}, return_only_outputs=True)
+    return {"text": response["answer"]}
 
 run(host='localhost', port=8080)
