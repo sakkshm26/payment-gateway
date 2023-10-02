@@ -50,7 +50,7 @@ const dashboard = () => {
         e.preventDefault();
         try {
             if (message.length) {
-                const response = await axios.post("https://razorpay-chatbot-service.onrender.com/getMessage", { text: message });
+                const response = await axios.post("http://localhost:8080/getMessage", { text: message });
                 console.log("res ---->", response.data)
             }
             setMessage("");
@@ -125,7 +125,7 @@ const dashboard = () => {
                         <Box
                             sx={{
                                 position: "fixed",
-                                bottom: 20,
+                                bottom: 60,
                                 right: 20,
                                 background: "#0b0b0b",
                                 borderRadius: 4,
@@ -197,33 +197,32 @@ const dashboard = () => {
                                 )}
                             </Box>
                             <Box height={30} />
-                            <form onSubmit={sendMessage}>
+                            <form onSubmit={sendMessage} style={{ display: "flex", justifyContent: "space-evenly" }}>
+                            <Box width={10} />
                                 <CustomInput
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
                                     placeholder="Enter your message"
-                                    style={{ width: "100%" }}
+                                    // style={{ width: "100%" }}
                                 />
-                                <Box height={10} />
                                 <Box
                                     sx={{
-                                        width: "100%",
                                         display: "flex",
                                         justifyContent: "space-around",
                                         alignItems: "flex-end",
                                     }}
                                 >
-                                    <Button
+                                    {/* <Button
                                         sx={{ color: "white" }}
                                         onClick={toggleChatbot}
                                     >
                                         <Clear />
-                                    </Button>
+                                    </Button> */}
                                     <Button
                                         sx={{ color: "white" }}
                                         type="submit"
                                     >
-                                        <Send />
+                                        <Send sx={{ fontSize: 22 }} />
                                     </Button>
                                 </Box>
                             </form>
