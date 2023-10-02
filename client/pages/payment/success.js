@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import {useSearchParams} from "next/navigation"
 import { useRouter } from 'next/router';
+import { Box } from '@mui/material';
 
 const success = () => {
     const router = useRouter();
@@ -14,10 +15,11 @@ const success = () => {
     }, [])
 
     return (
-        <div>
-            <p>Transaction created successfully with ID: {useSearchParams().get('id')}</p>
-            <p>Redirecting to dashboard shortly...</p>
-        </div>
+        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+            <Box height={40} />
+            <p style={{ textAlign: "center" }}>Transaction created successfully with ID: {useSearchParams().get('id')}</p>
+            <p style={{ textAlign: "center" }}>Redirecting to dashboard shortly...</p>
+        </Box>
     )
 }
 

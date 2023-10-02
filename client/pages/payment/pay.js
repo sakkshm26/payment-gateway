@@ -54,8 +54,8 @@ const pay = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 borderRadius: 4,
-                margin: "100px 35% 0 35%",
-                padding: "45px 0 60px 0",
+                margin: {xs: "70px 10% 0 10%", md: "100px 35% 0 35%"},
+                padding: {xs: "20px 0 30px 0", md: "45px 0 65px 0"},
                 boxShadow: "grey 0px 0px 50px -28px",
             }}
         >

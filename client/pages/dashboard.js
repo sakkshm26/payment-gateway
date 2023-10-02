@@ -5,7 +5,7 @@ import { AuthContext } from "../auth/useAuth";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import API from "../constant/api";
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import PrimaryButton from "../components/primaryButton";
 import { Send, Clear, Chat } from "@mui/icons-material";
 import CustomInput from "../components/customInput";
@@ -18,14 +18,8 @@ const dashboard = () => {
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([
         { text: "Hi! How can I help you?", sender: "bot" },
-        { text: "Hi! How can I help you?", sender: "user" },
-        { text: "Hi! How can I help you?", sender: "bot" },
-        { text: "Hi! How can I help you?", sender: "user" },
-        { text: "Hi! How can I help you?", sender: "bot" },
-        { text: "Hi! How can I help you?", sender: "user" },
-        { text: "Hi! How can I help you?", sender: "bot" },
-        { text: "Hi! How can I help you?", sender: "user" },
     ]);
+    const [messageLoading, setMessageLoading] = useState(false);
     const { user, logout } = useContext(AuthContext);
     const router = useRouter();
 
@@ -47,17 +41,30 @@ const dashboard = () => {
     };
 
     const sendMessage = async (e) => {
+        const text = message;
+        setMessage("");
+        setMessageLoading(true);
+        setMessages(() => [...messages, { text, sender: "user" }]);
         e.preventDefault();
         try {
             if (message.length) {
-                const response = await axios.post("http://localhost:8080/getMessage", { text: message });
-                console.log("res ---->", response.data)
+                const response = await axios.post(
+                    "http://localhost:8080/getMessage",
+                    { text }
+                );
+                console.log("res ---->", response.data);
+                setMessages(() => [
+                    ...messages,
+                    { text, sender: "user" },
+                    { text: response.data.text, sender: "bot" },
+                ]);
             }
-            setMessage("");
+            
         } catch (err) {
             console.log(err);
             toast.error("Something went wrong");
         }
+        setMessageLoading(false);
     };
 
     useEffect(() => {
@@ -146,10 +153,10 @@ const dashboard = () => {
                                     height: "100%",
                                 }}
                             >
-                                {messages.map((message) =>
+                                {messages.map((message, index) =>
                                     message.sender === "bot" ? (
                                         <Box
-                                            key={message.id}
+                                            key={index}
                                             sx={{
                                                 display: "flex",
                                                 justifyContent: "flex-start",
@@ -172,7 +179,7 @@ const dashboard = () => {
                                         </Box>
                                     ) : (
                                         <Box
-                                            key={message.id}
+                                            key={index}
                                             sx={{
                                                 display: "flex",
                                                 justifyContent: "flex-end",
@@ -197,8 +204,15 @@ const dashboard = () => {
                                 )}
                             </Box>
                             <Box height={30} />
-                            <form onSubmit={sendMessage} style={{ display: "flex", justifyContent: "space-evenly" }}>
-                            <Box width={10} />
+                            <form
+                                onSubmit={sendMessage}
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-evenly",
+                                    alignItems: "center"
+                                }}
+                            >
+                                <Box width={10} />
                                 <CustomInput
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
@@ -218,12 +232,16 @@ const dashboard = () => {
                                     >
                                         <Clear />
                                     </Button> */}
-                                    <Button
-                                        sx={{ color: "white" }}
-                                        type="submit"
-                                    >
-                                        <Send sx={{ fontSize: 22 }} />
-                                    </Button>
+                                    {messageLoading ? (
+                                        <CircularProgress size={22} sx={{ margin: "0 10px" }} />
+                                    ) : (
+                                        <Button
+                                            sx={{ color: "white" }}
+                                            type="submit"
+                                        >
+                                            <Send sx={{ fontSize: 22 }} />
+                                        </Button>
+                                    )}
                                 </Box>
                             </form>
                         </Box>
