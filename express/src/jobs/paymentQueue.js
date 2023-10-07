@@ -1,8 +1,9 @@
 import { Queue } from "bullmq";
-import redis from "../providers/redisClient";
+import dotenv from "dotenv";
+dotenv.config();
 
 const paymentQueue = new Queue("paymentQueue", {
-    connection: redis.duplicate(),
+    connection: process.env.REDIS_URL,
     defaultJobOptions: {
         attempts: 3,
         backoff: {

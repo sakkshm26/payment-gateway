@@ -1,12 +1,16 @@
-import { Box } from "@mui/material";
+import { Box, Checkbox } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import API from "../../constant/api";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../auth/useAuth";
 import { useSearchParams } from "next/navigation";
 import PrimaryButton from "../../components/primaryButton";
 import CustomInput from "../../components/customInput";
+import Calendar from "react-calendar";
+import "../../styles/Home.module.css";
+import "react-calendar/dist/Calendar.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const pay = () => {
     const [paymentType, setPaymentType] = useState(null);
@@ -22,6 +26,8 @@ const pay = () => {
     const router = useRouter();
     const { user } = useContext(AuthContext);
     const receiver_id = useSearchParams().get("receiver_id");
+    const [date, setDate] = useState(new Date());
+    const [schedulePayment, setSchedulePayment] = useState(false);
 
     useEffect(() => {
         if (!user) router.push("/login");
@@ -33,13 +39,22 @@ const pay = () => {
 
         try {
             const req_data = paymentType === "card" ? cardData : upiData;
-            const response = await API.post("/payment", {
+            let data = {
                 amount,
                 data: req_data,
                 type: paymentType,
                 receiver_id: receiver_id,
-            });
-            router.push(`/payment/success?id=${response.data._id}`);
+            };
+            if (schedulePayment) data = { ...data, date };
+            const response = await API.post("/payment", data);
+            if (schedulePayment) {
+                toast.success("Payment scheduled successfully");
+                setTimeout(() => {
+                    router.push(`/dashboard`);
+                }, 6000);
+            } else {
+                router.push(`/payment/success?id=${response.data._id}`);
+            }
         } catch (err) {
             console.log(err);
             toast.error(err?.response?.data?.message || "Something went wrong");
@@ -54,11 +69,12 @@ const pay = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 borderRadius: 4,
-                margin: {xs: "70px 10% 0 10%", md: "100px 35% 0 35%"},
-                padding: {xs: "20px 0 30px 0", md: "45px 0 65px 0"},
+                margin: { xs: "70px 10% 0 10%", md: "100px 35% 0 35%" },
+                padding: { xs: "20px 0 30px 0", md: "45px 0 65px 0" },
                 boxShadow: "grey 0px 0px 50px -28px",
             }}
         >
+            <ToastContainer theme="light" />
             {paymentType === null ? (
                 <Box
                     sx={{
@@ -162,7 +178,34 @@ const pay = () => {
                             required={true}
                         />
                     </Box>
-                    <Box height={40} />
+                    <Box sx={{ height: 40 }}></Box>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        Schedule Payment?
+                        <Checkbox
+                            sx={{ color: "grey" }}
+                            checked={schedulePayment}
+                            onChange={() =>
+                                setSchedulePayment(!schedulePayment)
+                            }
+                        />
+                    </Box>
+                    <Box sx={{ height: 40 }}></Box>
+                    {schedulePayment ? (
+                        <Calendar
+                            onChange={setDate}
+                            value={date}
+                            className="calendar"
+                            minDate={new Date()}
+                            maxDate={new Date(new Date().setDate(new Date().getDate() + 6))}
+                        />
+                    ) : null}
+                    <Box sx={{ height: 40 }}></Box>
                     <PrimaryButton
                         text="Pay"
                         type="submit"
@@ -203,6 +246,33 @@ const pay = () => {
                         }
                         required={true}
                     />
+                    <Box sx={{ height: 40 }}></Box>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        Schedule Payment?
+                        <Checkbox
+                            sx={{ color: "grey" }}
+                            checked={schedulePayment}
+                            onChange={() =>
+                                setSchedulePayment(!schedulePayment)
+                            }
+                        />
+                    </Box>
+                    <Box sx={{ height: 40 }}></Box>
+                    {schedulePayment ? (
+                        <Calendar
+                            onChange={setDate}
+                            value={date}
+                            className="calendar"
+                            minDate={new Date()}
+                            maxDate={new Date(new Date().setDate(new Date().getDate() + 6))}
+                        />
+                    ) : null}
                     <Box sx={{ height: 40 }}></Box>
                     <PrimaryButton
                         text="Pay"

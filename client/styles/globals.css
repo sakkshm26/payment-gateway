@@ -31,10 +31,13 @@ a {
   box-sizing: border-box;
 }
 
+.calendar {
+  border-radius: 10px;
+  background: white !important;
+  color: black !important;
+}
+
 @media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
   body {
     color: white;
     background: black;

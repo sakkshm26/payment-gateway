@@ -26,7 +26,7 @@ const dashboard = () => {
     const [username, setUsername] = useState();
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([
-        { text: "Hi! How can I help you?", sender: "bot" },
+        { text: "Hi! How can I help you?", sender: "bot" }
     ]);
     const [messageLoading, setMessageLoading] = useState(false);
     const { user, logout } = useContext(AuthContext);
@@ -65,28 +65,30 @@ const dashboard = () => {
     };
 
     const sendMessage = async (e) => {
-        const text = message;
-        setMessage("");
-        setMessageLoading(true);
-        setMessages(() => [...messages, { text, sender: "user" }]);
         e.preventDefault();
-        try {
-            if (message.length) {
-                const response = await axios.post(
-                    "https://elated-lion-slacks.cyclic.cloud/getMessage",
-                    { text }
-                );
-                setMessages(() => [
-                    ...messages,
-                    { text, sender: "user" },
-                    { text: response.data.text, sender: "bot" },
-                ]);
+        if (message?.length) {
+            const text = message;
+            setMessage("");
+            setMessageLoading(true);
+            setMessages(() => [...messages, { text, sender: "user" }]);
+            try {
+                if (message.length) {
+                    const response = await axios.post(
+                        "https://elated-lion-slacks.cyclic.cloud/getMessage",
+                        { text }
+                    );
+                    setMessages(() => [
+                        ...messages,
+                        { text, sender: "user" },
+                        { text: response.data.text, sender: "bot" },
+                    ]);
+                }
+            } catch (err) {
+                console.log(err);
+                toast.error("Something went wrong");
             }
-        } catch (err) {
-            console.log(err);
-            toast.error("Something went wrong");
+            setMessageLoading(false);
         }
-        setMessageLoading(false);
     };
 
     useEffect(() => {
@@ -146,7 +148,10 @@ const dashboard = () => {
                     />
 
                     {/* Button placed at the bottom right */}
-                    <Box style={{ position: "fixed", bottom: 20, right: 20 }} zIndex={5}>
+                    <Box
+                        style={{ position: "fixed", bottom: 20, right: 20 }}
+                        zIndex={5}
+                    >
                         <PrimaryButton
                             text={<Chat />}
                             onClick={toggleChatbot}
@@ -193,7 +198,7 @@ const dashboard = () => {
                                                     margin: "0 0 15px 0",
                                                     fontSize: 13,
                                                     marginRight: 5,
-                                                    backgroundColor: "#0e0e0e",
+                                                    backgroundColor: "#363636",
                                                     padding:
                                                         "7px 10px 8px 10px",
                                                     borderRadius: "5px",
@@ -216,10 +221,10 @@ const dashboard = () => {
                                                     margin: "0 0 15px 0",
                                                     fontSize: 13,
                                                     marginLeft: 5,
-                                                    backgroundColor: "#0e0e0e",
+                                                    backgroundColor: "#293656",
                                                     padding:
                                                         "7px 10px 8px 10px",
-                                                    borderRadius: "5px",
+                                                    borderRadius: "5px"
                                                 }}
                                             >
                                                 {message.text}
@@ -275,7 +280,14 @@ const dashboard = () => {
                         </Box>
                     )}
                     <Box height={80} />
-                    <Box sx={{ width: {xs: "100%", md: "60%"}, display: "flex", justifyContent: 'center', alignItems: "center" }}>
+                    <Box
+                        sx={{
+                            width: { xs: "100%", md: "60%" },
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
                         <ResponsiveContainer width={"80%"} height={230}>
                             <LineChart
                                 width={650}

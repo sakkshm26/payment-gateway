@@ -1,18 +1,38 @@
+import paymentQueue from "../jobs/paymentQueue.js";
 import Payment from "../models/payment.js";
 
 export const createPayment = async (req, res) => {
     try {
-        const { amount, type, data, receiver_id } = req.body;
+        const { amount, type, data, receiver_id, date } = req.body;
 
-        const payment = await Payment.create({
-            amount,
-            type,
-            data,
-            sender_id: req.user_id,
-            receiver_id,
-        });
+        const days_difference = Math.abs(
+            new Date(date).getDate() - new Date().getDate()
+        );
 
-        res.status(200).json(payment);
+        if (date) {
+            paymentQueue.add(
+                "paymentJob",
+                {
+                    amount,
+                    type,
+                    data,
+                    receiver_id,
+                    sender_id: req.user_id
+                },
+                { delay: days_difference * 24 * 60 * 60 * 1000 }
+            );
+            res.status(200).json({});
+        } else {
+            const payment = await Payment.create({
+                amount,
+                type,
+                data,
+                sender_id: req.user_id,
+                receiver_id,
+            });
+
+            res.status(200).json(payment);
+        }
     } catch (err) {
         console.log(err);
         res.status(500).json({

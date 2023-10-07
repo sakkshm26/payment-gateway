@@ -2,23 +2,31 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
+import PrimaryButton from "../components/primaryButton";
+import { Box } from "@mui/material";
 
 export default function Home() {
-  const router = useRouter();
+    const router = useRouter();
 
     return (
-        <div className={styles.container}>
-            <p>demo payment gateway</p>
-            <p>payment gateway</p>
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+            }}
+        >
+            <Box height={40} />
+            <p>PayPretend (Mock Payment Gateway)</p>
+            <Box height={50} />
 
-            <p>payment links</p>
-
-            <p>payment pages</p>
-
-            <p>QR codes</p>
-
-            <button onClick={() => router.push("/signup")}>Signup</button>
-            <button onClick={() => router.push("/login")}>Login</button>
-        </div>
+            <PrimaryButton
+                text="Signup"
+                onClick={() => router.push("/signup")}
+            />
+            <Box height={30} />
+            <PrimaryButton text="Login" onClick={() => router.push("/login")} />
+        </Box>
     );
 }

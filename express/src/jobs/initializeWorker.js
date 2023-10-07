@@ -1,10 +1,16 @@
 import { Worker } from "bullmq";
+import Payment from "../models/payment.js";
 
 const worker = new Worker("paymentQueue", async (job) => {
-    console.log(`Job id ${job.id} at ${new Date()}`);
-    console.log(`Parent key ${job.parentKey} at ${new Date()}`);
-    console.log(`Repeat job key ${job.parentKey} at ${new Date()}`);
-    return "Success";
+    const { amount, type, data, sender_id, receiver_id } = job.data;
+
+    await Payment.create({
+        amount,
+        type,
+        data,
+        sender_id,
+        receiver_id,
+    });
 });
 
 export const initializePaymentWorker = () => {

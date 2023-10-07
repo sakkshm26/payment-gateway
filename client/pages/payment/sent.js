@@ -4,6 +4,7 @@ import Payment from "../../components/payment";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../auth/useAuth";
 import { Box } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
 
 const sent = () => {
     const [loading, setLoading] = useState(true);
@@ -37,6 +38,7 @@ const sent = () => {
                 )) : <p>No payments made</p>
             )}
             <Box height={20} />
+            <ToastContainer theme="light" />
         </div>
     );
 };

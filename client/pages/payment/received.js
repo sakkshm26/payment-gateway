@@ -6,6 +6,7 @@ import { AuthContext } from "../../auth/useAuth";
 import Cookies from "js-cookie";
 import { Box } from "@mui/material";
 import PrimaryButton from "../../components/primaryButton";
+import { ToastContainer, toast } from "react-toastify";
 
 const sent = () => {
     const [loading, setLoading] = useState(true);
@@ -65,6 +66,7 @@ const sent = () => {
                 <p>No payments received</p>
             )}
             <Box height={20} />
+            <ToastContainer theme="light" />
         </div>
     );
 };
