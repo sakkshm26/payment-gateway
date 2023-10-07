@@ -5,7 +5,10 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import auth from "./middlewares/auth.js";
 import cors from "cors";
+import { initializePaymentWorker } from "./jobs/initializeWorker.js";
 dotenv.config();
+
+initializePaymentWorker();
 
 mongoose
     .connect("mongodb://127.0.0.1:27017/razorpay_clone")

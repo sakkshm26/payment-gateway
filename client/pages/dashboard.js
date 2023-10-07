@@ -11,6 +11,15 @@ import { Send, Clear, Chat } from "@mui/icons-material";
 import CustomInput from "../components/customInput";
 import { toast } from "react-toastify";
 import axios from "axios";
+import {
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    LineChart,
+    Line,
+    ResponsiveContainer,
+} from "recharts";
 
 const dashboard = () => {
     const [loading, setLoading] = useState(true);
@@ -24,6 +33,12 @@ const dashboard = () => {
     const router = useRouter();
 
     const [isChatbotOpen, setChatbotOpen] = useState(false);
+    const [chartData, setChartData] = useState([]);
+
+    const getDayOfWeek = (date) => {
+        const dayOfWeek = new Date(date).getDay();
+        return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayOfWeek];
+    };
 
     const toggleChatbot = () => {
         setChatbotOpen((prev) => !prev);
@@ -32,7 +47,16 @@ const dashboard = () => {
     const getUsername = async () => {
         try {
             const response = await API.get("/user");
-            setUsername(response.data.username);
+            setUsername(response.data.user.username);
+            for (const payment of response.data.payment_data) {
+                setChartData((prev) => [
+                    ...prev,
+                    {
+                        name: getDayOfWeek(payment.date),
+                        Amount: payment.amount,
+                    },
+                ]);
+            }
             setLoading(false);
         } catch (err) {
             console.log(err);
@@ -49,17 +73,15 @@ const dashboard = () => {
         try {
             if (message.length) {
                 const response = await axios.post(
-                    "http://localhost:8080/getMessage",
+                    "https://elated-lion-slacks.cyclic.cloud/getMessage",
                     { text }
                 );
-                console.log("res ---->", response.data);
                 setMessages(() => [
                     ...messages,
                     { text, sender: "user" },
                     { text: response.data.text, sender: "bot" },
                 ]);
             }
-            
         } catch (err) {
             console.log(err);
             toast.error("Something went wrong");
@@ -86,11 +108,13 @@ const dashboard = () => {
                         marginTop: 3,
                     }}
                 >
-                    <h4>Dashboard</h4>
+                    <h3>Dashboard</h3>
+
+                    <Box height={20} />
 
                     <p>Logged in as {username}</p>
 
-                    <Box sx={{ height: 25 }}></Box>
+                    <Box sx={{ height: 35 }}></Box>
 
                     <PrimaryButton
                         text="Pay"
@@ -122,7 +146,7 @@ const dashboard = () => {
                     />
 
                     {/* Button placed at the bottom right */}
-                    <Box style={{ position: "fixed", bottom: 20, right: 20 }}>
+                    <Box style={{ position: "fixed", bottom: 20, right: 20 }} zIndex={5}>
                         <PrimaryButton
                             text={<Chat />}
                             onClick={toggleChatbot}
@@ -134,7 +158,7 @@ const dashboard = () => {
                                 position: "fixed",
                                 bottom: 60,
                                 right: 20,
-                                background: "#0b0b0b",
+                                background: "#1c1c1c",
                                 borderRadius: 4,
                                 padding: "15px 5px",
                                 display: "flex",
@@ -144,6 +168,7 @@ const dashboard = () => {
                                 height: 350,
                                 width: 280,
                             }}
+                            zIndex={5}
                         >
                             <Box
                                 sx={{
@@ -168,7 +193,7 @@ const dashboard = () => {
                                                     margin: "0 0 15px 0",
                                                     fontSize: 13,
                                                     marginRight: 5,
-                                                    backgroundColor: "#2c2c2c",
+                                                    backgroundColor: "#0e0e0e",
                                                     padding:
                                                         "7px 10px 8px 10px",
                                                     borderRadius: "5px",
@@ -191,7 +216,7 @@ const dashboard = () => {
                                                     margin: "0 0 15px 0",
                                                     fontSize: 13,
                                                     marginLeft: 5,
-                                                    backgroundColor: "#2c2c2c",
+                                                    backgroundColor: "#0e0e0e",
                                                     padding:
                                                         "7px 10px 8px 10px",
                                                     borderRadius: "5px",
@@ -209,7 +234,7 @@ const dashboard = () => {
                                 style={{
                                     display: "flex",
                                     justifyContent: "space-evenly",
-                                    alignItems: "center"
+                                    alignItems: "center",
                                 }}
                             >
                                 <Box width={10} />
@@ -233,7 +258,10 @@ const dashboard = () => {
                                         <Clear />
                                     </Button> */}
                                     {messageLoading ? (
-                                        <CircularProgress size={22} sx={{ margin: "0 10px" }} />
+                                        <CircularProgress
+                                            size={22}
+                                            sx={{ margin: "0 10px" }}
+                                        />
                                     ) : (
                                         <Button
                                             sx={{ color: "white" }}
@@ -246,6 +274,51 @@ const dashboard = () => {
                             </form>
                         </Box>
                     )}
+                    <Box height={80} />
+                    <Box sx={{ width: {xs: "100%", md: "60%"}, display: "flex", justifyContent: 'center', alignItems: "center" }}>
+                        <ResponsiveContainer width={"80%"} height={230}>
+                            <LineChart
+                                width={650}
+                                height={300}
+                                data={chartData}
+                            >
+                                <CartesianGrid vertical={false} opacity="0.2" />
+                                <XAxis
+                                    tick={{ fill: "white" }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    dataKey="name"
+                                />
+                                <YAxis
+                                    tickCount={7}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    tick={{ fill: "white" }}
+                                    type="number"
+                                    domain={[0, 100]}
+                                />
+                                <Tooltip
+                                    viewBox={{
+                                        x: 0,
+                                        y: 0,
+                                        width: 20,
+                                        height: 20,
+                                    }}
+                                    cursor={false}
+                                    position="top"
+                                    wrapperStyle={{ display: "hidden" }}
+                                />
+                                <Line
+                                    fill="#40C0C0"
+                                    stroke="#40C0C0"
+                                    dot={true}
+                                    type="monotone"
+                                    dataKey="Amount"
+                                />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </Box>
+                    <Box height={100} />
                 </Box>
             )}
         </div>

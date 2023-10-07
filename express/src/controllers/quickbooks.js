@@ -50,7 +50,7 @@ export const syncPayments = async (req, res) => {
             });
         });
 
-        res.redirect(`${process.env.CLIENT_URL}/payment/history`);
+        res.redirect(`${process.env.CLIENT_URL}/payment/received`);
     } catch (err) {
         console.log(err);
         res.status(500).json({
