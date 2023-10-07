@@ -35,7 +35,7 @@ const sent = () => {
             ) : (
                 payments.length ? payments.map((payment, index) => (
                     <Payment key={index} payment={payment} />
-                )) : <p>No payments made</p>
+                )) : <p style={{ textAlign: "center", marginTop: 30 }}>No payments made</p>
             )}
             <Box height={20} />
             <ToastContainer theme="light" />
