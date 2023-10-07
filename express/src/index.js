@@ -21,6 +21,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.get("/health", (req, res) => {
+    res.send("OK");
+})
+
 app.use("/user", userRouter);
 app.use("/payment", auth, paymentRouter);
 app.use("/quickbooks", quickbooksRouter);
