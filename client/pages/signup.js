@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../auth/useAuth";
 import { useEffect } from "react";
 import CustomInput from "../components/customInput";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import PrimaryButton from "../components/primaryButton";
 
 const signup = () => {
@@ -14,6 +14,7 @@ const signup = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     const { user, signup } = useContext(AuthContext);
+    const [submitLoad, setSubmitLoad] = useState(false);
 
     useEffect(() => {
         if (user) router.push("/dashboard");
@@ -22,21 +23,30 @@ const signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setSubmitLoad(true);
 
-        signup(data);
+        await signup(data);
+
+        setSubmitLoad(false);
     };
 
     return (
         <div>
             {loading ? (
-                <p>Loading...</p>
+                <CircularProgress
+                    size={22}
+                    sx={{ margin: "0 10px", color: "#c06c6c" }}
+                />
             ) : (
-                <form onSubmit={handleSubmit} style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}>
+                <form
+                    onSubmit={handleSubmit}
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
                     <Box height={80} />
                     <CustomInput
                         name="username"
@@ -64,7 +74,18 @@ const signup = () => {
                     <Box height={50} />
                     <PrimaryButton text="Signup" type="submit" />
                     <Box height={10} />
-                    <a href="/login" style={{ fontSize: 13, color: "grey" }}>Or Login</a>
+                    <a href="/login" style={{ fontSize: 13, color: "grey" }}>
+                        Or Login
+                    </a>
+                    <Box height={15} />
+                    {submitLoad ? (
+                        <CircularProgress
+                            size={22}
+                            sx={{
+                                color: "#c06c6c",
+                            }}
+                        />
+                    ) : null}
                 </form>
             )}
             <ToastContainer theme="light" />

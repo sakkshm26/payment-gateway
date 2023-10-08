@@ -1,8 +1,9 @@
-import { useRouter } from 'next/router';
-import React, { useContext, useEffect, useState } from 'react'
-import { AuthContext } from '../auth/useAuth';
-import API from '../constant/api';
-import { toast } from 'react-toastify';
+import { useRouter } from "next/router";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../auth/useAuth";
+import API from "../constant/api";
+import { toast } from "react-toastify";
+import { CircularProgress } from "@mui/material";
 
 const profile = () => {
     const { user } = useContext(AuthContext);
@@ -10,15 +11,15 @@ const profile = () => {
     const [userData, setUserData] = useState(null);
 
     const getUserData = async () => {
-      try {
-        const response = await API.get("/user");
-        console.log("response: ", response.data);
-        setUserData(response.data);
-      } catch (err) {
-        console.log(err)
-        toast.error(err?.response?.data?.message || "Something went wrong");
-      }
-    }
+        try {
+            const response = await API.get("/user");
+            console.log("response: ", response.data);
+            setUserData(response.data);
+        } catch (err) {
+            console.log(err);
+            toast.error(err?.response?.data?.message || "Something went wrong");
+        }
+    };
 
     useEffect(() => {
         if (!user) router.push("/login");
@@ -27,9 +28,21 @@ const profile = () => {
 
     return (
         <div>
-            {userData ? "" : "Loading..."}
+            {userData ? (
+                ""
+            ) : (
+                <CircularProgress
+                    size={22}
+                    sx={{
+                        position: "absolute",
+                        top: "45%",
+                        left: { xs: "45%", md: "49%" },
+                        color: "#c06c6c"
+                    }}
+                />
+            )}
         </div>
-    )
-}
+    );
+};
 
-export default profile
+export default profile;

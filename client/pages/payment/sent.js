@@ -3,7 +3,7 @@ import API from "../../constant/api";
 import Payment from "../../components/payment";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../auth/useAuth";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 
 const sent = () => {
@@ -31,11 +31,23 @@ const sent = () => {
     return (
         <div>
             {loading ? (
-                <p>Loading...</p>
-            ) : (
-                payments.length ? payments.map((payment, index) => (
+                <CircularProgress
+                    size={22}
+                    sx={{
+                        position: "absolute",
+                        top: "45%",
+                        left: { xs: "45%", md: "49%" },
+                        color: "#c06c6c"
+                    }}
+                />
+            ) : payments.length ? (
+                payments.map((payment, index) => (
                     <Payment key={index} payment={payment} />
-                )) : <p style={{ textAlign: "center", marginTop: 30 }}>No payments made</p>
+                ))
+            ) : (
+                <p style={{ textAlign: "center", marginTop: 30 }}>
+                    No payments made
+                </p>
             )}
             <Box height={20} />
             <ToastContainer theme="light" />

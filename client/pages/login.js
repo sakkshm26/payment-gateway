@@ -7,12 +7,13 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import CustomInput from "../components/customInput";
 import PrimaryButton from "../components/primaryButton";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 
 const login = () => {
     const [data, setData] = useState({ username: "", password: "" });
     const router = useRouter();
     const [loading, setLoading] = useState(true);
+    const [submitLoad, setSubmitLoad] = useState(false);
     const { user, login } = useContext(AuthContext);
 
     useEffect(() => {
@@ -22,14 +23,25 @@ const login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setSubmitLoad(true);
 
-        login(data);
+        await login(data);
+
+        setSubmitLoad(false);
     };
 
     return (
         <div>
             {loading ? (
-                <p>Loading....</p>
+                <CircularProgress
+                    size={22}
+                    sx={{
+                        position: "absolute",
+                        top: "45%",
+                        left: { xs: "45%", md: "49%" },
+                        color: "#c06c6c",
+                    }}
+                />
             ) : (
                 <form
                     onSubmit={handleSubmit}
@@ -65,9 +77,24 @@ const login = () => {
                         maxLength={25}
                     />
                     <Box height={50} />
-                    <PrimaryButton text="Login" type="submit" />
+                    <PrimaryButton
+                        text="Login"
+                        type="submit"
+                        disabled={submitLoad}
+                    />
                     <Box height={10} />
-                    <a href="/signup" style={{ fontSize: 13, color: "grey" }}>Or Signup</a>
+                    <a href="/signup" style={{ fontSize: 13, color: "grey" }}>
+                        Or Signup
+                    </a>
+                    <Box height={15} />
+                    {submitLoad ? (
+                        <CircularProgress
+                            size={22}
+                            sx={{
+                                color: "#c06c6c",
+                            }}
+                        />
+                    ) : null}
                 </form>
             )}
             <ToastContainer theme="light" />

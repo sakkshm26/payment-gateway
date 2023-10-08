@@ -26,7 +26,7 @@ const dashboard = () => {
     const [username, setUsername] = useState();
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([
-        { text: "Hi! How can I help you?", sender: "bot" }
+        { text: "Hi! How can I help you?", sender: "bot" },
     ]);
     const [messageLoading, setMessageLoading] = useState(false);
     const { user, logout } = useContext(AuthContext);
@@ -99,7 +99,15 @@ const dashboard = () => {
     return (
         <div>
             {loading ? (
-                <p>Loading...</p>
+                <CircularProgress
+                    size={22}
+                    sx={{
+                        position: "absolute",
+                        top: "45%",
+                        left: { xs: "45%", md: "49%" },
+                        color: "#c06c6c"
+                    }}
+                />
             ) : (
                 <Box
                     sx={{
@@ -224,7 +232,7 @@ const dashboard = () => {
                                                     backgroundColor: "#293656",
                                                     padding:
                                                         "7px 10px 8px 10px",
-                                                    borderRadius: "5px"
+                                                    borderRadius: "5px",
                                                 }}
                                             >
                                                 {message.text}
@@ -265,7 +273,7 @@ const dashboard = () => {
                                     {messageLoading ? (
                                         <CircularProgress
                                             size={22}
-                                            sx={{ margin: "0 10px" }}
+                                            sx={{ color: "#c06c6c" }}
                                         />
                                     ) : (
                                         <Button

@@ -4,7 +4,7 @@ import Payment from "../../components/payment";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../auth/useAuth";
 import Cookies from "js-cookie";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import PrimaryButton from "../../components/primaryButton";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -57,7 +57,7 @@ const sent = () => {
             />
             <Box height={20} />
             {loading ? (
-                <p>Loading...</p>
+                <CircularProgress size={22} sx={{ color: "#c06c6c" }} />
             ) : payments.length ? (
                 payments.map((payment, index) => (
                     <Payment key={index} payment={payment} />

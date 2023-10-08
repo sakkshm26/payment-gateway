@@ -1,4 +1,4 @@
-import { Box, Checkbox } from "@mui/material";
+import { Box, Checkbox, CircularProgress } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import API from "../../constant/api";
 import { ToastContainer, toast } from "react-toastify";
@@ -202,7 +202,11 @@ const pay = () => {
                             value={date}
                             className="calendar"
                             minDate={new Date()}
-                            maxDate={new Date(new Date().setDate(new Date().getDate() + 6))}
+                            maxDate={
+                                new Date(
+                                    new Date().setDate(new Date().getDate() + 6)
+                                )
+                            }
                         />
                     ) : null}
                     <Box sx={{ height: 40 }}></Box>
@@ -270,7 +274,11 @@ const pay = () => {
                             value={date}
                             className="calendar"
                             minDate={new Date()}
-                            maxDate={new Date(new Date().setDate(new Date().getDate() + 6))}
+                            maxDate={
+                                new Date(
+                                    new Date().setDate(new Date().getDate() + 6)
+                                )
+                            }
                         />
                     ) : null}
                     <Box sx={{ height: 40 }}></Box>
@@ -281,7 +289,6 @@ const pay = () => {
                     />
                 </form>
             )}
-            {loading ? <p>Loading...</p> : null}
         </Box>
     );
 };
