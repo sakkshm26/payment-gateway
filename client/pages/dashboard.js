@@ -296,7 +296,7 @@ const dashboard = () => {
                             alignItems: "center",
                         }}
                     >
-                        <ResponsiveContainer width={"80%"} height={230}>
+                        <ResponsiveContainer width={"90%"} height={230}>
                             <LineChart
                                 width={650}
                                 height={300}

@@ -22,7 +22,7 @@ const CustomInput = ({
             value={value}
             onChange={onChange}
             required={required}
-            sx={{ color: "white", borderBottom: "1px solid #2b2b2b" }}
+            sx={{ color: "white", borderBottom: "1px solid #2b2b2b", fontSize: 14, padding: "0 10px" }}
             style={style}
         />
     );
