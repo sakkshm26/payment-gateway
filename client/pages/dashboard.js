@@ -169,9 +169,9 @@ const dashboard = () => {
                         <Box
                             sx={{
                                 position: "fixed",
-                                bottom: 60,
+                                bottom: 65,
                                 right: 20,
-                                background: "#1c1c1c",
+                                background: "#101010",
                                 borderRadius: 4,
                                 padding: "15px 5px",
                                 display: "flex",
@@ -206,7 +206,7 @@ const dashboard = () => {
                                                     margin: "0 0 15px 0",
                                                     fontSize: 13,
                                                     marginRight: 5,
-                                                    backgroundColor: "#363636",
+                                                    backgroundColor: "#2c2c2c",
                                                     padding:
                                                         "7px 10px 8px 10px",
                                                     borderRadius: "5px",
@@ -291,6 +291,7 @@ const dashboard = () => {
                     <Box
                         sx={{
                             width: { xs: "100%", md: "60%" },
+                            marginRight: 5,
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
