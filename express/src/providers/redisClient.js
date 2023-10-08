@@ -1,7 +1,10 @@
 import Redis from "ioredis";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const redisConfig = {
-    host: "localhost",
+    host: process.env.REDIS_URL,
     port: 6379,
 };
 
