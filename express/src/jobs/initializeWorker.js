@@ -1,5 +1,6 @@
 import { Worker } from "bullmq";
 import Payment from "../models/payment.js";
+import redis from "../providers/redisClient.js";
 
 const worker = new Worker("paymentQueue", async (job) => {
     const { amount, type, data, sender_id, receiver_id } = job.data;
@@ -11,6 +12,8 @@ const worker = new Worker("paymentQueue", async (job) => {
         sender_id,
         receiver_id,
     });
+}, {
+    connection: redis.duplicate()
 });
 
 export const initializePaymentWorker = () => {
