@@ -74,7 +74,7 @@ const dashboard = () => {
             try {
                 if (message.length) {
                     const response = await axios.post(
-                        "https://elated-lion-slacks.cyclic.cloud/getMessage",
+                        "https://razorpay-chatbot-service.onrender.com/getMessage",
                         { text }
                     );
                     setMessages(() => [
