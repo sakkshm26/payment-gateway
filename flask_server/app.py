@@ -1,4 +1,4 @@
-from bottle import route, run, request, post, response
+from flask import Flask, request
 import openai
 import os
 from dotenv import load_dotenv
@@ -20,27 +20,17 @@ chain = RetrievalQAWithSourcesChain.from_llm(llm=llm, retriever=VectorStore.as_r
 
 embeddings = OpenAIEmbeddings()
 
-def enable_cors(fn):
-    def _enable_cors(*args, **kwargs):
-        response.headers['Access-Control-Allow-Origin'] = '*'
-        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS'
-        response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
+app = Flask(__name__)
 
-        if request.method != 'OPTIONS':
-            return fn(*args, **kwargs)
+@app.get('/health')
+def health():
+    return {"status": "ok"}
 
-    return _enable_cors
-
-@route('/health')
-@enable_cors
-def index():
-    return {"success": True}
-
-@route('/getMessage', method=['OPTIONS', 'POST'])
-@enable_cors
+@app.post('/getMessage')
 def predict():
-    text = request.json.get("text")
+    text = request.get_json()['text']
     response = chain({"question": text}, return_only_outputs=True)
     return {"text": response["answer"]}
 
-run(host='localhost', port=8080)
+if __name__ == '__main__':
+    app.run()
