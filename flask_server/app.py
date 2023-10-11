@@ -6,6 +6,7 @@ import pickle
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.chat_models import ChatOpenAI
+from flask_cors import CORS, cross_origin
 
 load_dotenv()
 
@@ -22,11 +23,16 @@ embeddings = OpenAIEmbeddings()
 
 app = Flask(__name__)
 
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 @app.get('/health')
+@cross_origin()
 def health():
     return {"status": "ok"}
 
 @app.post('/getMessage')
+@cross_origin()
 def predict():
     text = request.get_json()['text']
     response = chain({"question": text}, return_only_outputs=True)
